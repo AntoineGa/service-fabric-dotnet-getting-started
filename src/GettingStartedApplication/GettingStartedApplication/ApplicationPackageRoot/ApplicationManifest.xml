@@ -15,7 +15,11 @@
     <Parameter Name="MyActorService_PartitionCount" DefaultValue="10" />
     <Parameter Name="MyActorService_MinReplicaSetSize" DefaultValue="3" />
     <Parameter Name="MyActorService_TargetReplicaSetSize" DefaultValue="3" />
+    <Parameter Name="Minio.ServiceFabric_InstanceCount" DefaultValue="-1" />
   </Parameters>
+  <ServiceManifestImport>
+    <ServiceManifestRef ServiceManifestName="Minio.ServiceFabricPkg" ServiceManifestVersion="1.0.0" />
+  </ServiceManifestImport>
   <!-- Import the ServiceManifest from the ServicePackage. The ServiceManifestName and ServiceManifestVersion 
        should match the Name and Version attributes of the ServiceManifest element defined in the 
        ServiceManifest.xml file. -->
@@ -80,6 +84,11 @@
       <StatefulService ServiceTypeName="MyActorServiceType" TargetReplicaSetSize="[MyActorService_TargetReplicaSetSize]" MinReplicaSetSize="[MyActorService_MinReplicaSetSize]">
         <UniformInt64Partition PartitionCount="[MyActorService_PartitionCount]" LowKey="-9223372036854775808" HighKey="9223372036854775807" />
       </StatefulService>
+    </Service>
+    <Service Name="Minio.ServiceFabric" ServicePackageActivationMode="ExclusiveProcess">
+      <StatelessService ServiceTypeName="Minio.ServiceFabricType" InstanceCount="[Minio.ServiceFabric_InstanceCount]">
+        <SingletonPartition />
+      </StatelessService>
     </Service>
   </DefaultServices>
 </ApplicationManifest>
